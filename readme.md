@@ -292,8 +292,19 @@ Here are important contexts in this chapter.
 * Light that reflects off a diffuse surface has its direction randomized
 * They also might be absorbed rather than reflected.
 
-So, we can apply the random_in_unit_shpere() using rejection method to random the point from the sphere. in my case, I needed to switch to use stdlib.h instead of my own random generator while it produced some bugs. I switched to use drand45() directly in this point, and so, we are able to render the diffuse material.
+So, we can apply the random_in_unit_shpere() using rejection method to random the point from the sphere. in my case, I needed to switch to use stdlib.h instead of my own random generator while it produced some bugs. I switched to use drand45() directly in this point, and so, we are able to render the diffuse material, or we could say it's ambient occlusion.
 
 ![](./images/c7.PNG)
 
-## 
+## Chapter 8: Metal
+
+``
+In our program, the material needs to do two things.
+
+1. Produce a scattered ray(or ray it absorbed the incident ray)
+2. if scattered, say how much the ray should be attenuated.
+``
+
+We start create an abstract class and assigned to the hitable object. hence, as the object is hit by the ray, we are able to call the material class and observe it. then, i implemented the class according to the book. for metal material, we do scattering on the ray. the result is just amazing!
+
+![](./images/c8.PNG)
