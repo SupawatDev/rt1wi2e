@@ -36,10 +36,171 @@ Then, we can read the first-image.ppm with a image viewer.
 
 ![](./images/c1.PNG)
 
-tada~ the first image is baked! we also check a bit of operations in bit to see another color! for example,
+tada~ the first image is baked!
 
 ## Chapter 2: 3D Vector
 In 3D graphic, the 3D vector operations will be much used. we can create a 3D vector class, or we can simply import from third part library. As for understanding the operations of 3D vector. It's better to make it from scratch. we can check the 3D vector class in the main file.
+```cpp
+#include <math.h>
+#include <stdlib.h>
+#include <iostream>
+
+class vec3
+{
+public:
+    vec3() {}
+    vec3(float e0, float e1, float e2)
+    {
+        e[0] = e0;
+        e[1] = e1;
+        e[2] = e2;
+    }
+    inline float x() const { return e[0]; }
+    inline float y() const { return e[1]; }
+    inline float z() const { return e[2]; }
+
+    inline float r() const { return e[0]; }
+    inline float g() const { return e[1]; }
+    inline float b() const { return e[2]; }
+
+    //ref
+    inline const vec3 &operator+() const { return *this; }
+    inline vec3 operator-() const { return vec3(e[0], -e[1], -e[2]); }
+    inline float operator[](int i) const { return e[i]; }
+    inline float &operator[](int i) { return e[i]; }
+    // ops
+    inline vec3 &operator+=(const vec3 &v2);
+    inline vec3 &operator-=(const vec3 &v2);
+    inline vec3 &operator*=(const vec3 &v2);
+    inline vec3 &operator/=(const vec3 &v2);
+    inline vec3 &operator*=(const float t);
+    inline vec3 &operator/=(const float t);
+
+    inline float length() const
+    {
+        return sqrt(pow(e[0], 2) + pow(e[1], 2) + pow(e[2], 2));
+    }
+    inline float squared_length() const
+    {
+        return pow(e[0], 2) + pow(e[1], 2) + pow(e[2], 2);
+    }
+
+    inline void make_unit_vector();
+
+    float e[3];
+};
+
+inline std::istream &operator>>(std::istream &is, vec3 &t)
+{
+    is >> t.e[0] >> t.e[1] >> t.e[2];
+    return is;
+    ;
+}
+inline std::ostream &operator<<(std::ostream &os, const vec3 &t)
+{
+    os << t.e[0] << t.e[1] << t.e[2];
+    return os;
+}
+
+inline void vec3::make_unit_vector()
+{
+    float k = 1.0 / sqrt(pow(e[0], 2) + pow(e[1], 2) + pow(e[2], 2));
+    e[0] *= k;
+    e[1] *= k;
+    e[2] *= k;
+}
+
+inline vec3 operator+(const vec3 &v1, const vec3 &v2)
+{
+    return vec3(v1.e[0] + v1.e[0], v1.e[1] + v1.e[1], v1.e[2] + v1.e[2]);
+}
+
+inline vec3 operator-(const vec3 &v1, const vec3 &v2)
+{
+    return vec3(v1.e[0] - v1.e[0], v1.e[1] - v1.e[1], v1.e[2] - v1.e[2]);
+}
+inline vec3 operator*(const vec3 &v1, const vec3 &v2)
+{
+    return vec3(v1.e[0] * v1.e[0], v1.e[1] * v1.e[1], v1.e[2] * v1.e[2]);
+}
+inline vec3 operator/(const vec3 &v1, const vec3 &v2)
+{
+    return vec3(v1.e[0] / v1.e[0], v1.e[1] / v1.e[1], v1.e[2] / v1.e[2]);
+}
+
+inline vec3 operator*(float t, const vec3 &v)
+{
+    return vec3(t * v.e[0], t * v.e[1], t * v.e[2]);
+}
+inline vec3 operator*(const vec3 &v, float t)
+{
+    return vec3(t * v.e[0], t * v.e[1], t * v.e[2]);
+}
+inline vec3 operator/(const vec3 &v, float t)
+{
+    return vec3(v.e[0] / t, v.e[1] / t, v.e[2] / t);
+}
+inline float dot(const vec3 &v1, const vec3 &v2)
+{
+    return v1.e[0] * v2.e[0] + v1.e[1] * v2.e[1] + v1.e[2] * v2.e[2];
+}
+inline vec3 cross(const vec3 &v1, const vec3 &v2)
+{
+    return vec3(
+        v1.e[1] * v2.e[2] - v1.e[2] * v2.e[1],
+        -v1.e[2] * v2.e[0] - v1.e[0] * v2.e[2],
+        v1.e[0] * v2.e[1] - v1.e[1] * v2.e[0]);
+}
+
+inline vec3 &vec3::operator+=(const vec3 &v)
+{
+    e[0] += v.e[0];
+    e[1] += v.e[1];
+    e[2] += v.e[2];
+    return *this;
+}
+inline vec3 &vec3::operator-=(const vec3 &v)
+{
+    e[0] -= v.e[0];
+    e[1] -= v.e[1];
+    e[2] -= v.e[2];
+    return *this;
+}
+inline vec3 &vec3::operator*=(const vec3 &v)
+{
+    e[0] *= v.e[0];
+    e[1] *= v.e[1];
+    e[2] *= v.e[2];
+    return *this;
+}
+inline vec3 &vec3::operator/=(const vec3 &v)
+{
+    e[0] /= v.e[0];
+    e[1] /= v.e[1];
+    e[2] /= v.e[2];
+    return *this;
+}
+inline vec3 &vec3::operator*=(const float t)
+{
+    e[0] *= t;
+    e[1] *= t;
+    e[2] *= t;
+    return *this;
+}
+inline vec3 &vec3::operator/=(const float t)
+{
+    float k = 1.0 / t;
+    e[0] *= k;
+    e[1] *= k;
+    e[2] *= k;
+    return *this;
+}
+inline vec3 unit_vector(vec3 v)
+{
+    return v / v.length();
+}
+```
+Let'see if everything is okay
 ``` cpp
 #include "vec3.h"
 #include <iostream>
@@ -55,7 +216,7 @@ And it results,
 ``` bash
 a+b: 2.24.26.2
 ```
-Ok, I guess it works
+Ok, I guess it works, for now.
 
 ## Chapter 3: Rays, a simple camera, and background.
 As being said in the book, every ray tracer needs a ray class. we can simply create a ray class where it contains its position and direction in 3D vectors. 
@@ -108,3 +269,14 @@ After serveral implementations on hitablelist, we are able to create multiple ob
 
 ## Chapter 6: Antialiasing
 
+so, we can see jaggies aloung the edges, what we can do is antialiasing. what we do is sending rays to the pixel randomly and average the color of the rays. 
+
+![](./images/c6.PNG)
+
+As the result, we can see the jaggies are not blurred from the random and average process. 
+
+Let's try more sample, and see if the edges are smoother. I will try 1000 samples.
+
+![](./images/c62.PNG)
+
+It takes really long time, and the result doesnt seem so much different.
