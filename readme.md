@@ -280,3 +280,20 @@ Let's try more sample, and see if the edges are smoother. I will try 1000 sample
 ![](./images/c62.PNG)
 
 It takes really long time, and the result doesnt seem so much different.
+
+![](./images/c6e.PNG )
+
+## Chapter 7: Diffuse Materials
+
+Here are important contexts in this chapter.
+
+* Diffuse objects that don’t emit light merely take on the color of their surroundings.
+* They modulate that with their own intrinsic color.
+* Light that reflects off a diffuse surface has its direction randomized
+* They also might be absorbed rather than reflected.
+
+So, we can apply the random_in_unit_shpere() using rejection method to random the point from the sphere. in my case, I needed to switch to use stdlib.h instead of my own random generator while it produced some bugs. I switched to use drand45() directly in this point, and so, we are able to render the diffuse material.
+
+![](./images/c7.PNG)
+
+## 
