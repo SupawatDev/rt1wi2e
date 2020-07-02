@@ -86,4 +86,25 @@ and tada~
 
 ![](./images/c4m.PNG)
 
-## Chapter 5: 
+## Chapter 5: Surface normals, and mulitple objects
+After we can detect the sphere and print the colur out of it. now, we need to obseve the content on the sphere surface. then, we might have to observe the surface normal so we can tell the color will be on.
+
+the normal of the sphere is in the direction of the hitpoint minus the center of the sphere. we can find the distance from normal point and shade it on the sphere.
+
+we changed hit_sphere function to output the distance of the sphere from the view plane. As the discriminant is less than 0, the scence can print the background color. but if the ray hit on sphere, the color fucntion receive the distance and able to shade the sphere, in my code, i would like to shade the sphere on harizontally, so I can shade the color as the x-axis changes.
+![](./images/c5.PNG)
+
+next, we can continue on implement the hit function to the object can be hitable by ray. it can be implement to an abstract class.
+
+then, we can use this abstract class into the sphere as object that is hitable. and we can apply the intersection calculation into the sphere function.
+
+as the object are hitable, we need to make the list of object, so we can check them as then ray traces.
+
+![](./images/cs51.PNG)
+
+After serveral implementations on hitablelist, we are able to create multiple objects in the main function.
+
+![](./images/c52.PNG)
+
+## Chapter 6: Antialiasing
+

@@ -61,7 +61,7 @@ inline std::ostream &operator<<(std::ostream &os, const vec3 &t)
 
 inline void vec3::make_unit_vector()
 {
-    float k = 1.0 / sqrt(pow(e[0], 2) + pow(e[1], 2) + pow(e[1], 2));
+    float k = 1.0 / sqrt(pow(e[0], 2) + pow(e[1], 2) + pow(e[2], 2));
     e[0] *= k;
     e[1] *= k;
     e[2] *= k;
