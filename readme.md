@@ -65,7 +65,7 @@ public:
 
     //ref
     inline const vec3 &operator+() const { return *this; }
-    inline vec3 operator-() const { return vec3(e[0], -e[1], -e[2]); }
+    inline vec3 operator-() const { return vec3(-e[0], -e[1], -e[2]); }
     inline float operator[](int i) const { return e[i]; }
     inline float &operator[](int i) { return e[i]; }
     // ops
@@ -341,3 +341,45 @@ float schlick(float cosine, float ref_idx){
 the glass would still appear upside down, we can apply the same glass with the smaller radius inside the glass with reverse the radius to negative, therefore the light can bounce reversely back to normal.
 
 ![](./images/c9.PNG)
+
+## Chapter 10: Positionable Camera
+
+We can implement our camera class to be able to specify field of view and aspect. then, we consider the viewpoint by defining lookfrom and lookat in the class constructor.
+
+``` cpp
+class camera
+{
+public:
+    camera(vec3 lookfrom, vec3 lookat, vec3 vup, float vfov, float aspect){
+        vec3 u, v, w;
+
+        float theta = vfov*M_PI/180;
+        float half_height = tan(theta/2);
+        float half_width = aspect*half_height;
+        
+        origin = lookfrom;
+        w = unit_vector(lookfrom - lookat);
+        u = unit_vector(cross(vup, w));
+        v = cross(w, u);
+
+        left_corner = origin - half_width*u - half_height*v - w;
+        horizontal = 2*half_width*u;
+        vertical = 2*half_height*v;
+    }
+
+    ray get_ray(float u, float v){return ray(origin, left_corner + horizontal*u + vertical*v - origin );}
+
+    vec3 left_corner;
+    vec3 horizontal;
+    vec3 vertical;
+    vec3 origin;
+};
+
+```
+
+what we do is to relocate the cemera by definding the look from and look at, but we also  implement view up (vup) vector, so we are able to rotate the camera down. 
+
+![](./images/c10.PNG)
+
+## Chapter 11: Defocus Blur
+

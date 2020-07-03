@@ -77,7 +77,7 @@ class dielectric: public material{
             vec3 outward_normal;
             vec3 reflected = reflect(r.direction(), rec.normal);
             float ni_over_nt;
-            attenuation = vec3(.9, .9, 1.);
+            attenuation = vec3(1., 1., 1.);
             vec3 refracted;
             float reflect_prob;
             float cosine;
@@ -132,22 +132,26 @@ vec3 color(const ray &r, hitable *world, int depth)
 
 int main()
 {
-    int n_width = 400;
-    int n_height = 200;
+    int n_width = 800;
+    int n_height = 400;
     int n_sample = 20;
     srand(time(NULL));
     std::cout << "P3\n"
               << n_width << " " << n_height << "\n255\n";
 
     hitable *object_list[5];
-    object_list[0] = new sphere(vec3(0, 0, -1), 0.5, new lambertian(vec3(0.1, 1, 0.3)));
-    object_list[1] = new sphere(vec3(1, -100.5, -1), 100, new lambertian(vec3(0.8, 0.8, 0.0)));
+    object_list[0] = new sphere(vec3(0, 0, -1), 0.5, new lambertian(vec3(0.1, 2, 0.5)));
+    object_list[1] = new sphere(vec3(1, -100.5, -1), 100, new lambertian(vec3(0.2, 0.2, 0.9)));
     object_list[2] = new sphere(vec3(1, 0, -1), 0.5, new metal(vec3(0.3, 0.4, 0.3), 0));
     object_list[3] = new sphere(vec3(-1, 0, -1), 0.5, new dielectric(1.5));
-    object_list[4] = new sphere(vec3(-1, 0, -1), -0.49, new dielectric(1.5));
+    object_list[4] = new sphere(vec3(-1, 0, -1), -0.45, new dielectric(1.5));
     hitable *world = new hitable_list(object_list, 5);
-    
-    camera cam;
+
+    vec3 lookfrom(1,3,2);
+    vec3 lookat(0,0,-1);
+
+
+    camera cam(vec3(-2,2,1), vec3(0,0,-1), vec3(0, 1,0), 50, float(n_width)/float(n_height));
     for (int j = n_height - 1; j >= 0; --j)
         for (int i = 0; i < n_width; ++i)
         {
