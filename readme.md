@@ -383,3 +383,61 @@ what we do is to relocate the cemera by definding the look from and look at, but
 
 ## Chapter 11: Defocus Blur
 
+Depth of field, defocus blur, is a feature that we implement the camera having the lens. 
+
+``` cpp
+#ifndef CAMERA_H
+#define CAMERA_H
+
+#include "ray.h"
+
+vec3 random_in_unit_disk(){
+    vec3 p;
+    do{
+        p = 2.0*vec3(drand48(), drand48(), 0) - vec3(1,1,0);
+    } while (dot(p, p)>= 1.0 );
+
+    return p;
+}
+class camera
+{
+public:
+    camera(vec3 lookfrom, vec3 lookat, vec3 vup, float vfov, float aspect, float aperture, float focus_dist){
+        float lens_radius = aperture/2;
+
+        float theta = vfov*M_PI/180;
+        float half_height = tan(theta/2);
+        float half_width = aspect*half_height;
+        
+        origin = lookfrom;
+        w = unit_vector(lookfrom - lookat);
+        u = unit_vector(cross(vup, w));
+        v = cross(w, u);
+
+        left_corner = origin - half_width*u*focus_dist - half_height*v*focus_dist - w*focus_dist;
+        horizontal = 2*half_width*u*focus_dist;
+        vertical = 2*half_height*v*focus_dist;
+
+    }
+
+    ray get_ray(float s, float t){
+        vec3 rd = lens_radius*random_in_unit_disk();
+        vec3 offset = u*rd.x() + v*rd.y();
+        return ray(origin + offset, left_corner + horizontal*s + vertical*t - origin - offset );    
+    }
+
+    vec3 left_corner;
+    vec3 horizontal;
+    vec3 vertical;
+    vec3 origin;
+    vec3 u,v,w;
+    float lens_radius;
+
+};
+#endif
+
+```
+
+what we do is random a vector in unit disk and calculating radius with aparature, as outside focus range, we simply random the ray in the unity, allowing us to see the bokeh effect.
+
+![](./images/c11.PNG)
